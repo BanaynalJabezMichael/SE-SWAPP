@@ -273,7 +273,7 @@ export default function App() {
           <ScrollView style={styles.scrollView}>
             {bmiResult.map((item, index) => (
               <View key={index} style={styles.listItem}>
-                <Text style={styles.listItemText}>Height: {item.currentDate}</Text>
+                <Text style={styles.listItemText}>Date: {item.currentDate}</Text>
                 <Text style={styles.listItemText}>Height: {item.height} cm</Text>
                 <Text style={styles.listItemText}>Weight: {item.weight} kg</Text>
                 <Text style={styles.listItemText}>BMI: {item.bmi}</Text>
