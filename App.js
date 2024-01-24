@@ -205,11 +205,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ScrollView } from 'react-native';
 
 export default function App() {
-  const [age, setAge] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [gender, setGender] = useState('');
   const [bmiResult, setBmiResult] = useState([]);
+  const [showHistory, setShowHistory] = useState(true);
+  const currentDate = new Date().toLocaleString();
+  
   
   const validateForm = () => {
     if (!height || !weight) {
@@ -233,11 +234,9 @@ export default function App() {
     } else if (bmi >= 35) {
       result = 'Extremely obese';
     }
-    setBmiResult([...bmiResult, { height, weight, bmi, result }]);
-    setAge('');
+    setBmiResult([...bmiResult, { currentDate, height, weight, bmi, result }].reverse());
     setHeight('');
     setWeight('');
-    setGender('');
   };
   
   const deleteItem = (index) => {
@@ -267,22 +266,28 @@ export default function App() {
         <Text style={styles.buttonText}>Calculate BMI</Text>
       </TouchableOpacity>
       <Text style={styles.listTitle}>BMI History</Text>
-      <ScrollView style={styles.scrollView}>
-      {bmiResult.map((item, index) => (
-        <View key={index} style={styles.listItem}>
-          <Text style={styles.listItemText}>Height: {item.height} cm</Text>
-          <Text style={styles.listItemText}>Weight: {item.weight} kg</Text>
-          <Text style={styles.listItemText}>BMI: {item.bmi}</Text>
-          <Text style={styles.listItemText}>Result: {item.result}</Text>
-          <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      ))}
-      </ScrollView>
+      <TouchableOpacity style={styles.toggleButton} onPress={() => setShowHistory(!showHistory)}>
+        <Text style={styles.toggleButtonText}>{showHistory ? 'Hide History' : 'Show History'}</Text>
+      </TouchableOpacity>
+        {showHistory && (
+          <ScrollView style={styles.scrollView}>
+            {bmiResult.map((item, index) => (
+              <View key={index} style={styles.listItem}>
+                <Text style={styles.listItemText}>Height: {item.currentDate}</Text>
+                <Text style={styles.listItemText}>Height: {item.height} cm</Text>
+                <Text style={styles.listItemText}>Weight: {item.weight} kg</Text>
+                <Text style={styles.listItemText}>BMI: {item.bmi}</Text>
+                <Text style={styles.listItemText}>Result: {item.result}</Text>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
+                  <Text style={styles.deleteButtonText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+      )}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -356,9 +361,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    width: '80%',
+    width: '90%',
     padding: 5,
     marginBottom: 15,
   },
+  toggleButton: {
+    backgroundColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  toggleButtonText: {
+    color: '#333',
+    fontWeight: 'bold',
+  },
 });
-
